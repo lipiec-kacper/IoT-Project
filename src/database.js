@@ -115,7 +115,8 @@ export {
   insertFacilities,
   insertSound,
   insertTemperature,
-  insertVoc
+  insertVoc,
+  db
 };
 
 console.log('Database initialized successfully');
