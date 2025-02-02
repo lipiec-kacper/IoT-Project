@@ -1,9 +1,14 @@
 import { db } from "./database.js";
 
-function getBestLightRooms(date, startHour, endHour) {
+function getBestLightRooms(date, startHour, endHour, pref) {
+  let recommended = 500;
+  if (pref === null || pref === undefined) {
+    pref = recommended
+  }
+
   const query = db.prepare(`
         SELECT room_number, AVG(light_intensity) AS avg_light_intensity,
-               ABS(AVG(light_intensity) - 500) AS deviation
+               ABS(AVG(light_intensity) - ?) AS deviation
         FROM light
         WHERE strftime('%Y-%m-%d', time) = ? 
         AND strftime('%H', time) BETWEEN ? AND ?
@@ -11,14 +16,23 @@ function getBestLightRooms(date, startHour, endHour) {
         ORDER BY deviation ASC;
     `);
 
-  return query.all(date, startHour, endHour);
+  return query.all(pref, date, startHour, endHour);
 }
 
 
-function getBestAirQualityRoom(date, startHour, endHour) {
+function getBestAirQualityRoom(date, startHour, endHour, pref_25, pref_10) {
+  let recommended_25 = 5;
+  let recommended_10 = 15;
+
+  if (pref_25 === null || pref_25 === undefined) {
+    pref_25 = recommended_25;
+  } else if (pref_10 === null || pref_10 === undefined) {
+    pref_10 = recommended_10;
+  }
+
   const query = db.prepare(`
     SELECT room_number, AVG(PM_25) AS avg_PM2_5, AVG(PM_10) AS avg_PM10,
-           ABS(AVG(PM_25) - 5) AS deviation_PM2_5, ABS(AVG(PM_10) - 15) AS deviation_PM10
+           ABS(AVG(PM_25) - ?) AS deviation_PM2_5, ABS(AVG(PM_10) - ?) AS deviation_PM10
     FROM air_quality
     WHERE strftime('%Y-%m-%d', time) = ? 
     AND strftime('%H', time) BETWEEN ? AND ?
@@ -26,13 +40,17 @@ function getBestAirQualityRoom(date, startHour, endHour) {
     ORDER BY deviation_PM2_5 ASC, deviation_PM10 ASC;
   `);
 
-  return query.all(date, startHour, endHour);
+  return query.all(pref_25, pref_10, date, startHour, endHour);
 }
 
-function getBestCO2Room(date, startHour, endHour) {
+function getBestCO2Room(date, startHour, endHour, pref) {
+  let recommended = 0;
+  if (pref === null || pref === undefined) {
+    pref = recommended
+  }
   const query = db.prepare(`
         SELECT room_number, AVG(co2_level) AS avg_co2_level,
-               ABS(AVG(co2_level) - 0) AS deviation
+               ABS(AVG(co2_level) - ?) AS deviation
         FROM co2
         WHERE strftime('%Y-%m-%d', time) = ? 
         AND strftime('%H', time) BETWEEN ? AND ?
@@ -40,13 +58,17 @@ function getBestCO2Room(date, startHour, endHour) {
         ORDER BY deviation ASC;
     `);
 
-  return query.all(date, startHour, endHour);
+  return query.all(pref, date, startHour, endHour);
 }
 
-function getBestHumidityRoom(date, startHour, endHour) {
+function getBestHumidityRoom(date, startHour, endHour, pref) {
+  let recommended = 40;
+  if (pref === null || pref === undefined) {
+    pref = recommended
+  }
   const query = db.prepare(`
         SELECT room_number, AVG(humidity_level) AS avg_humidity_level,
-               ABS(AVG(humidity_level) - 40) AS deviation
+               ABS(AVG(humidity_level) - ?) AS deviation
         FROM humidity
         WHERE strftime('%Y-%m-%d', time) = ? 
         AND strftime('%H', time) BETWEEN ? AND ?
@@ -54,13 +76,17 @@ function getBestHumidityRoom(date, startHour, endHour) {
         ORDER BY deviation ASC;
     `);
 
-  return query.all(date, startHour, endHour);
+  return query.all(pref, date, startHour, endHour);
 }
 
-function getBestSoundRoom(date, startHour, endHour) {
+function getBestSoundRoom(date, startHour, endHour, pref) {
+  let recommended = 0;
+  if (pref === null || pref === undefined) {
+    pref = recommended
+  }
   const query = db.prepare(`
         SELECT room_number, AVG(sound_level) AS avg_sound_level,
-               ABS(AVG(sound_level) - 0) AS deviation
+               ABS(AVG(sound_level) - ?) AS deviation
         FROM sound
         WHERE strftime('%Y-%m-%d', time) = ? 
         AND strftime('%H', time) BETWEEN ? AND ?
@@ -68,13 +94,17 @@ function getBestSoundRoom(date, startHour, endHour) {
         ORDER BY deviation ASC;
     `);
 
-  return query.all(date, startHour, endHour);
+  return query.all(pref, date, startHour, endHour);
 }
 
-function getBestTemperatureRoom(date, startHour, endHour) {
+function getBestTemperatureRoom(date, startHour, endHour, pref) {
+  let recommended = 23;
+  if (pref === null || pref === undefined) {
+    pref = recommended
+  }
   const query = db.prepare(`
         SELECT room_number, AVG(temperature) AS avg_temperature_level,
-               ABS(AVG(temperature) - 23) AS deviation
+               ABS(AVG(temperature) - ?) AS deviation
         FROM temperature
         WHERE strftime('%Y-%m-%d', time) = ? 
         AND strftime('%H', time) BETWEEN ? AND ?
@@ -82,14 +112,18 @@ function getBestTemperatureRoom(date, startHour, endHour) {
         ORDER BY deviation ASC;
     `);
 
-  return query.all(date, startHour, endHour);
+  return query.all(pref, date, startHour, endHour);
 }
 
 
-function getBestVOCRoom(date, startHour, endHour) {
+function getBestVOCRoom(date, startHour, endHour, pref) {
+  let recommended = 0;
+  if (pref === null || pref === undefined) {
+    pref = recommended
+  }
   const query = db.prepare(`
         SELECT room_number, AVG(voc_level) AS avg_voc_level,
-               ABS(AVG(voc_level) - 0) AS deviation
+               ABS(AVG(voc_level) - ?) AS deviation
         FROM voc
         WHERE strftime('%Y-%m-%d', time) = ? 
         AND strftime('%H', time) BETWEEN ? AND ?
@@ -97,11 +131,14 @@ function getBestVOCRoom(date, startHour, endHour) {
         ORDER BY deviation ASC;
     `);
 
-  return query.all(date, startHour, endHour);
+  return query.all(pref, date, startHour, endHour);
 }
 
 function insertToAList(scores, weight) {
   let list = {};
+  if (weight === null || weight === undefined) {
+    weight = 1;
+  }
   let index = 5;
   scores.forEach((room) => {
     //console.log(room.room_number);
@@ -112,26 +149,6 @@ function insertToAList(scores, weight) {
 
   return list;
 }
-
-// function findFinalBest(score1, score2) {
-//   let score = {};
-//   for (let i = 1; i < score1.length; i++) {
-//     score[i] = score1[i][1] + score2[i][1];
-//   }
-//   return score
-// }
-//
-// function findFinalBest(score1, score2, score3, score4, score5, score6, score7) {
-//   let score = {};
-//   // Loop through the keys (room numbers) in score1 and score2
-//   for (let room in score1) {
-//     if (score2[room] !== undefined) {  // Make sure the room exists in both score1 and score2
-//       score[room] = score1[room] + score2[room];  // Sum the values for the same room number
-//     }
-//   }
-//   return score;
-// }
-//
 function findFinalBest(score1, score2, score3, score4, score5, score6, score7) {
   let score = {};
 
@@ -151,19 +168,20 @@ function findFinalBest(score1, score2, score3, score4, score5, score6, score7) {
   return score;
 }
 
+
 // User inputs
 const date = '2024-10-29';
 const startHour = '06';
-const endHour = '07';
+const endHour = '08';
 
-function finalBestRanking(date, startHour, endHour, vocWeight, tempWeight, lightWeight, airWeight, co2Weight, humidWeight, soundWeight) {
-  const bestLightRooms = getBestLightRooms(date, startHour, endHour);
-  const bestAirQualityRoom = getBestAirQualityRoom(date, startHour, endHour);
-  const bestCO2Room = getBestCO2Room(date, startHour, endHour);
-  const bestHumidityRoom = getBestHumidityRoom(date, startHour, endHour);
-  const bestSoundRoom = getBestSoundRoom(date, startHour, endHour);
-  const bestTemperatureRoom = getBestTemperatureRoom(date, startHour, endHour);
-  const bestVOCRoom = getBestVOCRoom(date, startHour, endHour);
+function finalBestRanking(date, startHour, endHour, vocWeight, vocPref, tempWeight, tempPref, lightWeight, lightPref, airWeight, airPrefPM25, airPrefPM10, co2Weight, co2Pref, humidWeight, hmdPref, soundWeight, sndPref) {
+  const bestLightRooms = getBestLightRooms(date, startHour, endHour, lightPref);
+  const bestAirQualityRoom = getBestAirQualityRoom(date, startHour, endHour, airPrefPM25, airPrefPM10);
+  const bestCO2Room = getBestCO2Room(date, startHour, endHour, co2Pref);
+  const bestHumidityRoom = getBestHumidityRoom(date, startHour, endHour, hmdPref);
+  const bestSoundRoom = getBestSoundRoom(date, startHour, endHour, sndPref);
+  const bestTemperatureRoom = getBestTemperatureRoom(date, startHour, endHour, tempPref);
+  const bestVOCRoom = getBestVOCRoom(date, startHour, endHour, vocPref);
   //
   // console.log(bestLightRooms);
   // console.log(bestAirQualityRoom);
@@ -196,9 +214,14 @@ function finalBestRanking(date, startHour, endHour, vocWeight, tempWeight, light
   return bestofbest;
 }
 
-let test = finalBestRanking(date, startHour, endHour, 3, 4, 2, 1, 2, 4, 5);
+let test = finalBestRanking(date, startHour, endHour, 5, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 console.log(test)
 
+
+
+export {
+  finalBestRanking
+}
 
 
 //TEST

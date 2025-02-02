@@ -160,10 +160,10 @@ function parseAndInsertFacilities(jsonFile) {
         // Now handle the insert logic
         if (videoprojector) {
           //console.log(1, seating_capacity, computers, robots_for_training, roomNumber);
-          insertFacilities(1, seating_capacity, computers, robots_for_training);
+          insertFacilities(1, seating_capacity, computers, robots_for_training, roomNumber);
         } else {
           //console.log(0, seating_capacity, computers, robots_for_training, roomNumber);
-          insertFacilities(0, seating_capacity, computers, robots_for_training);
+          insertFacilities(0, seating_capacity, computers, robots_for_training, roomNumber);
         }
       } else {
         console.log(`❌ No facilities found for Room ${roomNumber}`);

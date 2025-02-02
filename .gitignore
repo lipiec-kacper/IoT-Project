@@ -1,3 +1,7 @@
 #Ignore the sensors data folder
 
 Project_sensor_data/
+
+#Ignore docx files
+
+*.docx
