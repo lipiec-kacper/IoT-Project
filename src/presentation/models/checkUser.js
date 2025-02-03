@@ -46,9 +46,21 @@ function insertUser(email, password) {
   return result.changes > 0;
 }
 
+function insertBooking(room, day, startHour, endHour, user_id) {
+  const query = db.prepare(`
+        INSERT INTO bookings (room, day, startHour, endHour, user_id) 
+        VALUES (?, ?, ?, ?, ?)
+    `);
+
+  const result = query.run(room, day, startHour, endHour, user_id);
+  return result.changes > 0;
+
+}
+
 export {
   isUserRegistered,
   getUserId,
   checkIfUserAlreadyExists,
-  insertUser
+  insertUser,
+  insertBooking
 }

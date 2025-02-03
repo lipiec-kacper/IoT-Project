@@ -11,7 +11,9 @@ CREATE TABLE IF NOT EXISTS user (
 CREATE TABLE IF NOT EXISTS bookings (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   room INTEGER,
-  time TEXT,
+  day TEXT,
+  startHour TEXT,
+  endHour TEXT,
   user_id INTEGER,
   FOREIGN KEY(user_id) REFERENCES user(id)
 );

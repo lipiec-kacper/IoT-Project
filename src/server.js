@@ -1,5 +1,5 @@
-import { getLightData, getAirQualityData, getCO2Data, getHumidityData, getSoundData, getTemperatureData, getVocData, getFacilitiesData } from "./getData.js";
-import { isUserRegistered, getUserId, checkIfUserAlreadyExists, insertUser } from "./presentation/models/checkUser.js";
+import { getLightData, getAirQualityData, getCO2Data, getHumidityData, getSoundData, getTemperatureData, getVocData, getFacilitiesData, getBookings } from "./getData.js";
+import { isUserRegistered, getUserId, checkIfUserAlreadyExists, insertUser, insertBooking } from "./presentation/models/checkUser.js";
 import { finalBestRanking } from "./algo.js";
 import express from 'express';
 import session from 'express-session';
@@ -31,6 +31,8 @@ app.use(express.static(path.join(__dirname, 'presentation')));
 //   res.sendFile(path.join(__dirname, 'presentation', 'pages', 'auth.html'));
 // });
 //
+//
+let userId;
 
 app.route('/')
   .get((req, res) => {
@@ -45,7 +47,7 @@ app.route('/')
       const isRegistered = isUserRegistered(email, password);
 
       if (isRegistered) {
-        let userId = getUserId(email, password);
+        userId = getUserId(email, password);
         req.session.userId = userId;  // Store user in session
         return res.redirect('/home');
       }
@@ -109,7 +111,13 @@ app.route('/home')
 
       // Call the API for results and return JSON
       const result = finalBestRanking(date, startHour, endHour, vocWeight, null, temperatureWeight, null, lightWeight, null, airWeight, null, null, co2Weight, null, humidityWeight, null, soundWeight, null, amountComp, amountSeat, projector, amountRob);
-      return res.json(Object.entries(result).sort((a, b) => b[1] - a[1]));  // Return the result as JSON
+      insertBooking(formattedResults[0]?.roomNumber, date, startHour, endHour, userId);
+
+      const formattedResults = Object.entries(result)
+        .sort((a, b) => b[1] - a[1])
+        .map(([room, score]) => ({ roomNumber: room, score }));
+
+      return res.json({ message: "Here is the ranking from the best to the worst classroom, the best one has been added to the Booking", results: formattedResults });
     }
 
     if (formType === 'prop') {
@@ -144,15 +152,19 @@ app.route('/home')
 
       // Call the API for results and return JSON
       const result = finalBestRanking(date, startHour, endHour, vocWeight, vocPref, temperatureWeight, temperaturePref, lightWeight, lightPref, airWeight, airPrefPM25, airPrefPM10, co2Weight, co2Pref, humidityWeight, humidityPref, soundWeight, soundPref, amountComp, amountSeat, projector, amountRob);
-      return res.json(Object.entries(result).sort((a, b) => b[1] - a[1]));  // Return the result as JSON
+
+      const formattedResults = Object.entries(result)
+        .sort((a, b) => b[1] - a[1])
+        .map(([room, score]) => ({ roomNumber: room, score }));
+
+      insertBooking(formattedResults[0]?.roomNumber, String(date), startHour, endHour, userId);
+
+      return res.json({ message: "Here is the ranking from the best to the worst classroom, the best one has been added to the Booking", results: formattedResults });
     }
-
-
 
     // Default case: if formType is not 'recom', serve the home page
     res.sendFile(path.join(__dirname, 'presentation', 'pages', 'home.html'));
   });
-
 
 // Function to get data from various APIs
 function getData(date, startHour, endHour) {
@@ -178,6 +190,13 @@ app.get('/api/facilities', (req, res) => {
   const { room } = req.query;
   res.json(getFacilitiesData(room));
 });
+
+//TODO: api for bookings
+//
+app.get('/api/bookings', (req, res) => {
+  const { date, startHour, endHour } = req.query;
+  res.json(getBookings(date, startHour, endHour));
+})
 
 // API to get the results based on user preferences
 app.get('/api/results', (req, res) => {

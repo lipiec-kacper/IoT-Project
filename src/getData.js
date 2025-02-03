@@ -95,6 +95,19 @@ function getFacilitiesData(room) {
   return query.all(room);
 }
 
+function getBookings(date, startHour, endHour) {
+  const query = db.prepare(`
+    SELECT *
+    FROM bookings
+    WHERE day = ?
+    AND startHour >= ?
+    AND endHour <= ?
+    ORDER BY startHour ASC;
+  `);
+
+  return query.all(date, startHour, endHour);
+}
+
 export {
   getLightData,
   getAirQualityData,
@@ -103,7 +116,8 @@ export {
   getSoundData,
   getTemperatureData,
   getVocData,
-  getFacilitiesData
+  getFacilitiesData,
+  getBookings
 }
 
 
