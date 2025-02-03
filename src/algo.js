@@ -134,6 +134,213 @@ function getBestVOCRoom(date, startHour, endHour, pref) {
   return query.all(pref, date, startHour, endHour);
 }
 
+// function getRoomWithFacilities(computersAmount, seatsAmount, videoProjector, robotsAmount) {
+//   const project = videoProjector || 0
+//   let computersRooms;
+//   let seatsAmountRooms;
+//   let projectorRooms;
+//   let robotsAmountRooms;
+//
+//   let result;
+//   if (computersAmount !== null || computersAmount !== undefined) {
+//     const query = db.prepare(`
+//         SELECT room_number
+//         FROM facilities
+//         WHERE computers >= ? ;
+//     `);
+//
+//     computersRooms = query.all(computersAmount);
+//   }
+//
+//   if (seatsAmount !== 0 || seatsAmount !== undefined) {
+//     const query2 = db.prepare(`
+//         SELECT room_number
+//         FROM facilities
+//         WHERE seating_capacity >= ? ;
+//     `);
+//
+//     seatsAmountRooms = query2.all(seatsAmount)
+//   }
+//
+//   if (videoProjector === 1) {
+//     const query3 = db.prepare(`
+//         SELECT room_number
+//         FROM facilities
+//         WHERE videoprojector = 1 ;
+//     `);
+//
+//     projectorRooms = query3.all();
+//
+//   }
+//
+//   if (robotsAmount !== null || robotsAmount !== undefined) {
+//     const query4 = db.prepare(`
+//         SELECT room_number
+//         FROM facilities
+//         WHERE robots_for_training >= ? ;
+//     `);
+//
+//     robotsAmountRooms = query4.all(seatsAmount)
+//   }
+//
+//   console.log(computersRooms);
+//   console.log(seatsAmountRooms);
+//   console.log(projectorRooms);
+//   console.log(robotsAmountRooms);
+//
+//
+// }
+//
+// function getRoomWithFacilities(computersAmount, seatsAmount, videoProjector, robotsAmount) {
+//   const project = videoProjector || 0;
+//
+//   let computersRooms = [];
+//   let seatsAmountRooms = [];
+//   let projectorRooms = [];
+//   let robotsAmountRooms = [];
+//
+//   // Query to find rooms with the required computers amount
+//   if (computersAmount !== null && computersAmount !== undefined && computersAmount > 0) {
+//     const query = db.prepare(`
+//         SELECT room_number
+//         FROM facilities
+//         WHERE computers >= ? ;
+//     `);
+//     computersRooms = query.all(computersAmount);
+//   }
+//
+//   // Query to find rooms with the required seats amount
+//   if (seatsAmount !== null && seatsAmount !== undefined && seatsAmount > 0) {
+//     const query2 = db.prepare(`
+//         SELECT room_number
+//         FROM facilities
+//         WHERE seating_capacity >= ? ;
+//     `);
+//     seatsAmountRooms = query2.all(seatsAmount);
+//   }
+//
+//   // Query to find rooms with a projector
+//   if (videoProjector === 1) {
+//     const query3 = db.prepare(`
+//         SELECT room_number
+//         FROM facilities
+//         WHERE videoprojector = 1 ;
+//     `);
+//     projectorRooms = query3.all();
+//   }
+//
+//   // Query to find rooms with the required robots amount
+//   if (robotsAmount !== null && robotsAmount !== undefined && robotsAmount > 0) {
+//     const query4 = db.prepare(`
+//         SELECT room_number
+//         FROM facilities
+//         WHERE robots_for_training >= ? ;
+//     `);
+//     robotsAmountRooms = query4.all(robotsAmount);
+//   }
+//
+//   console.log("seats amount", seatsAmountRooms);
+//   console.log("computers", computersRooms)
+//   console.log("projectorRooms", projectorRooms)
+//   console.log("robotsAmountRooms", robotsAmountRooms)
+//
+//   // Combine the results - Find rooms that meet all the conditions
+//   let matchingRooms = computersRooms;
+//
+//   if (seatsAmountRooms.length > 0) {
+//     matchingRooms = matchingRooms.filter(room => seatsAmountRooms.includes(room));
+//   }
+//
+//   if (projectorRooms.length > 0) {
+//     matchingRooms = matchingRooms.filter(room => projectorRooms.includes(room));
+//   }
+//
+//   if (robotsAmountRooms.length > 0) {
+//     matchingRooms = matchingRooms.filter(room => robotsAmountRooms.includes(room));
+//   }
+//
+//   // Final check for rooms that meet all conditions
+//   if (matchingRooms.length > 0) {
+//     console.log('Rooms that meet all requirements: ', matchingRooms);
+//     return matchingRooms;
+//   } else {
+//     console.log('No rooms available with these properties');
+//     return 'No rooms available with these properties';
+//   }
+// }
+//
+function getRoomWithFacilities(computersAmount, seatsAmount, videoProjector, robotsAmount) {
+  let computersRooms = [];
+  let seatsAmountRooms = [];
+  let projectorRooms = [];
+  let robotsAmountRooms = [];
+
+  // Query to find rooms with the required computers amount
+  if (computersAmount !== null && computersAmount !== undefined) {
+    const query = db.prepare(`
+        SELECT room_number
+        FROM facilities
+        WHERE computers >= ? ;
+    `);
+    computersRooms = query.all(computersAmount).map(room => room.room_number);
+  }
+
+  // Query to find rooms with the required seats amount
+  if (seatsAmount !== null && seatsAmount !== undefined) {
+    const query2 = db.prepare(`
+        SELECT room_number
+        FROM facilities
+        WHERE seating_capacity >= ? ;
+    `);
+    seatsAmountRooms = query2.all(seatsAmount).map(room => room.room_number);
+  }
+
+  // Query to find rooms with a projector
+  if (videoProjector === 1) {
+    const query3 = db.prepare(`
+        SELECT room_number
+        FROM facilities
+        WHERE videoprojector = 1 ;
+    `);
+    projectorRooms = query3.all().map(room => room.room_number);
+  }
+
+  // Query to find rooms with the required robots amount
+  if (robotsAmount !== null && robotsAmount !== undefined) {
+    const query4 = db.prepare(`
+        SELECT room_number
+        FROM facilities
+        WHERE robots_for_training >= ? ;
+    `);
+    robotsAmountRooms = query4.all(robotsAmount).map(room => room.room_number);
+  }
+
+  // Combine the results - Find rooms that meet all the conditions
+  let matchingRooms = computersRooms;
+
+  if (seatsAmountRooms.length > 0) {
+    matchingRooms = matchingRooms.filter(room => seatsAmountRooms.includes(room));
+  }
+
+  if (projectorRooms.length > 0) {
+    matchingRooms = matchingRooms.filter(room => projectorRooms.includes(room));
+  }
+
+  if (robotsAmountRooms.length > 0) {
+    matchingRooms = matchingRooms.filter(room => robotsAmountRooms.includes(room));
+  }
+
+  // Final check for rooms that meet all conditions
+  if (matchingRooms.length > 0) {
+    console.log('Rooms that meet all requirements: ', matchingRooms);
+    return matchingRooms;
+  } else {
+    console.log('No rooms available with these properties');
+    return 'No rooms available with these properties';
+  }
+}
+
+
 function insertToAList(scores, weight) {
   let list = {};
   if (weight === null || weight === undefined) {
@@ -172,9 +379,14 @@ function findFinalBest(score1, score2, score3, score4, score5, score6, score7) {
 // User inputs
 const date = '2024-10-29';
 const startHour = '06';
-const endHour = '08';
+const endHour = '09';
 
-function finalBestRanking(date, startHour, endHour, vocWeight, vocPref, tempWeight, tempPref, lightWeight, lightPref, airWeight, airPrefPM25, airPrefPM10, co2Weight, co2Pref, humidWeight, hmdPref, soundWeight, sndPref) {
+function finalBestRanking(
+  date, startHour, endHour, vocWeight, vocPref, tempWeight, tempPref, lightWeight, lightPref,
+  airWeight, airPrefPM25, airPrefPM10, co2Weight, co2Pref, humidWeight, hmdPref, soundWeight,
+  sndPref, computersAmount, seatsAmount, videoProjector, robotsAmount) {
+
+  // Get the best rooms based on the environmental factors (light, air quality, etc.)
   const bestLightRooms = getBestLightRooms(date, startHour, endHour, lightPref);
   const bestAirQualityRoom = getBestAirQualityRoom(date, startHour, endHour, airPrefPM25, airPrefPM10);
   const bestCO2Room = getBestCO2Room(date, startHour, endHour, co2Pref);
@@ -182,39 +394,64 @@ function finalBestRanking(date, startHour, endHour, vocWeight, vocPref, tempWeig
   const bestSoundRoom = getBestSoundRoom(date, startHour, endHour, sndPref);
   const bestTemperatureRoom = getBestTemperatureRoom(date, startHour, endHour, tempPref);
   const bestVOCRoom = getBestVOCRoom(date, startHour, endHour, vocPref);
-  //
-  // console.log(bestLightRooms);
-  // console.log(bestAirQualityRoom);
-  // console.log(bestCO2Room);
-  // console.log(bestHumidityRoom);
-  // console.log(bestSoundRoom);
-  // console.log(bestTemperatureRoom);
-  // console.log(bestVOCRoom)
-  //Insert and add a weight to the best ranking of each
-  let bestVOC = insertToAList(bestVOCRoom, vocWeight);
-  let bestTEMP = insertToAList(bestTemperatureRoom, tempWeight)
-  let bestlight = insertToAList(bestLightRooms, lightWeight);
-  let bestAir = insertToAList(bestAirQualityRoom, airWeight);
-  let bestCO2 = insertToAList(bestCO2Room, co2Weight);
-  let bestHumid = insertToAList(bestHumidityRoom, humidWeight);
-  let bestSound = insertToAList(bestSoundRoom, soundWeight);
 
-  // console.log("Voc \t", Object.entries(bestVOC).sort((a, b) => b[1] - a[1]))
-  // console.log("Temp \t", Object.entries(bestTEMP).sort((a, b) => b[1] - a[1]))
-  // console.log("Light \t", Object.entries(bestlight).sort((a, b) => b[1] - a[1]))
-  // console.log("Air \t", Object.entries(bestAir).sort((a, b) => b[1] - a[1]))
-  // console.log("CO2 \t", Object.entries(bestCO2).sort((a, b) => b[1] - a[1]))
-  // console.log("Humid \t", Object.entries(bestHumid).sort((a, b) => b[1] - a[1]))
-  // console.log("Sound \t", Object.entries(bestSound).sort((a, b) => b[1] - a[1]))
-  //
+  // Get rooms that match the facility requirements
+  const availableRooms = getRoomWithFacilities(computersAmount, seatsAmount, videoProjector, robotsAmount);
 
-  //final ranking with weight added
-  let bestofbest = findFinalBest(bestVOC, bestTEMP, bestlight, bestAir, bestCO2, bestHumid, bestSound);
+  // Filter each room list based on the available rooms
+  let filteredLightRooms = bestLightRooms.filter(room => availableRooms.includes(room.room_number));
+  let filteredAirQualityRooms = bestAirQualityRoom.filter(room => availableRooms.includes(room.room_number));
+  let filteredCO2Rooms = bestCO2Room.filter(room => availableRooms.includes(room.room_number));
+  let filteredHumidityRooms = bestHumidityRoom.filter(room => availableRooms.includes(room.room_number));
+  let filteredSoundRooms = bestSoundRoom.filter(room => availableRooms.includes(room.room_number));
+  let filteredTemperatureRooms = bestTemperatureRoom.filter(room => availableRooms.includes(room.room_number));
+  let filteredVOCRooms = bestVOCRoom.filter(room => availableRooms.includes(room.room_number));
+
+  // If all facility values are null or undefined, skip filtering and proceed with default behavior
+  if (
+    (computersAmount === null || computersAmount === undefined) &&
+    (seatsAmount === null || seatsAmount === undefined) &&
+    (videoProjector === null || videoProjector === undefined) &&
+    (robotsAmount === null || robotsAmount === undefined)
+  ) {
+    // If no facilities specified, retain all best rooms without filtering
+    filteredLightRooms = bestLightRooms;
+    filteredAirQualityRooms = bestAirQualityRoom;
+    filteredCO2Rooms = bestCO2Room;
+    filteredHumidityRooms = bestHumidityRoom;
+    filteredSoundRooms = bestSoundRoom;
+    filteredTemperatureRooms = bestTemperatureRoom;
+    filteredVOCRooms = bestVOCRoom;
+  }
+
+  // If any of the filtered arrays are empty, return "No rooms available"
+  if (
+    filteredLightRooms.length === 0 ||
+    filteredAirQualityRooms.length === 0 ||
+    filteredCO2Rooms.length === 0 ||
+    filteredHumidityRooms.length === 0 ||
+    filteredSoundRooms.length === 0 ||
+    filteredTemperatureRooms.length === 0 ||
+    filteredVOCRooms.length === 0
+  ) {
+    return 'No rooms available with these properties';
+  }
+
+  // Insert weight into each "best" ranking
+  let bestVOC = insertToAList(filteredVOCRooms, vocWeight);
+  let bestTEMP = insertToAList(filteredTemperatureRooms, tempWeight);
+  let bestLight = insertToAList(filteredLightRooms, lightWeight);
+  let bestAir = insertToAList(filteredAirQualityRooms, airWeight);
+  let bestCO2 = insertToAList(filteredCO2Rooms, co2Weight);
+  let bestHumid = insertToAList(filteredHumidityRooms, humidWeight);
+  let bestSound = insertToAList(filteredSoundRooms, soundWeight);
+
+  // Final ranking with weights added
+  let bestofbest = findFinalBest(bestVOC, bestTEMP, bestLight, bestAir, bestCO2, bestHumid, bestSound);
 
   return bestofbest;
 }
-
-let test = finalBestRanking(date, startHour, endHour, 5, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+let test = finalBestRanking(date, startHour, endHour, null, null, null, 25, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 console.log(test)
 
 
@@ -222,46 +459,5 @@ console.log(test)
 export {
   finalBestRanking
 }
-
-
-//TEST
-//Get the best ranking
-// const bestLightRooms = getBestLightRooms(date, startHour, endHour);
-// const bestAirQualityRoom = getBestAirQualityRoom(date, startHour, endHour);
-// const bestCO2Room = getBestCO2Room(date, startHour, endHour);
-// const bestHumidityRoom = getBestHumidityRoom(date, startHour, endHour);
-// const bestSoundRoom = getBestSoundRoom(date, startHour, endHour);
-// const bestTemperatureRoom = getBestTemperatureRoom(date, startHour, endHour);
-// const bestVOCRoom = getBestVOCRoom(date, startHour, endHour);
-//
-// console.log(bestLightRooms);
-// console.log(bestAirQualityRoom);
-// console.log(bestCO2Room);
-// console.log(bestHumidityRoom);
-// console.log(bestSoundRoom);
-// console.log(bestTemperatureRoom);
-// console.log(bestVOCRoom)
-// //Insert and add a weight to the best ranking of each
-// let bestVOC = insertToAList(bestVOCRoom, 5);
-// let bestTEMP = insertToAList(bestTemperatureRoom, 4)
-// let bestlight = insertToAList(bestLightRooms, 3);
-// let bestAir = insertToAList(bestAirQualityRoom, 1);
-// let bestCO2 = insertToAList(bestCO2Room, 1);
-// let bestHumid = insertToAList(bestHumidityRoom, 1);
-// let bestSound = insertToAList(bestSoundRoom, 1);
-//
-// console.log("Voc \t", Object.entries(bestVOC).sort((a, b) => b[1] - a[1]))
-// console.log("Temp \t", Object.entries(bestTEMP).sort((a, b) => b[1] - a[1]))
-// console.log("Light \t", Object.entries(bestlight).sort((a, b) => b[1] - a[1]))
-// console.log("Air \t", Object.entries(bestAir).sort((a, b) => b[1] - a[1]))
-// console.log("CO2 \t", Object.entries(bestCO2).sort((a, b) => b[1] - a[1]))
-// console.log("Humid \t", Object.entries(bestHumid).sort((a, b) => b[1] - a[1]))
-// console.log("Sound \t", Object.entries(bestSound).sort((a, b) => b[1] - a[1]))
-//
-//
-// //final ranking with weight added
-// let bestofbest = findFinalBest(bestVOC, bestTEMP, bestlight, bestAir, bestCO2, bestHumid, bestSound);
-// console.log(Object.entries(bestofbest).sort((a, b) => b[1] - a[1]));
-//
 
 

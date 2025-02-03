@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/home.css">
+    <title>Home</title>
+</head>
+<body>
+  <div class="transPart">
+    <div class="leftPart">
+    <h1>Find best classroom with European recommended values</h1>
+        <form action="/home" method="POST">
+        <p>Enter the date:</p>
+        <input name="date" type="date" required>
+        <div>
+          <p>StartHour:</p>
+          <input name="startHour" type="text" required>
+          <p>EndHour:</p>
+          <input name="endHour" type="text" required>
+        </div>
+          <p>Lights Weight:</p>
+          <input name="lightWeight" type="number">
+          <p>Air Weight:</p>
+          <input name="airWeight" type="number">
+          <p>CO2 Weight:</p>
+          <input name="co2Weight" type="number">
+          <p>Humidity Weight:</p>
+          <input name="humidityWeight" type="number">
+          <p>Sound Weight</p>
+          <input name="soundWeight" type="number">
+          <p>TemperatureWeigth</p>
+          <input name="temperatureWeight" type="number">
+          <p>VOC Weight</p>
+          <input name="vocWeight" type="number">
+
+          <p>Min amount of Computers</p>
+          <input name="amountComp" type="number">
+          <p>Min amount of Seats</p>
+          <input name="amountSeat" type="number">
+          <p>Projector(1 Yes, 0 No )</p>
+          <input name="projector" type="number">
+          <p>Min amount of Robots</p>
+          <input name="amountRob" type="number">
+          <input type="hidden" name="form_type" value="recom">
+        <button class="Enter">Enter</button>
+    </form>
+    </div>
+    <div class="rightpart">
+      <h1>Find best classroom with your own properties</h1>
+        <form action="/home" method="POST">
+          <p>Enter the date:</p>
+        <input name="date" type="date" required>
+        <div>
+          <p>StartHour:</p>
+          <input name="startHour" type="text" required>
+          <p>EndHour:</p>
+          <input name="endHour" type="text" required>
+        </div>
+          <p>Lights Weight:</p>
+          <input name="lightWeight" type="number">
+          <p>Light Preferences</p>
+          <input name="lightPref" type="number">
+
+          <p>Air Weight:</p>
+          <input name="airWeight" type="number">
+          <p>Air Preferences PM2.5</p>
+          <input name="airPrefPM25" type="number">
+          <p>Air Preferences PM10</p>
+          <input name="airPrefPM10" type="number">
+
+          <p>CO2 Weight:</p>
+          <input name="co2Weight" type="number">
+          <p>CO2 Preferences</p>
+          <input name="co2Pref" type="number">
+
+          <p>Humidity Weight:</p>
+          <input name="humidityWeight" type="number">
+          <p>Humidity Preferences</p>
+          <input name="humidityPref" type="number">
+
+          <p>Sound Weight</p>
+          <input name="soundWeight" type="number">
+          <p>Sound Preferences</p>
+          <input name="soundPref" type="number">
+
+          <p>TemperatureWeigth</p>
+          <input name="temperatureWeight" type="number">
+          <p>Temperature Preferences</p>
+          <input name="temperaturePref" type="number">
+
+          <p>VOC Weight</p>
+          <input name="vocWeight" type="number">
+          <p>VOC Preferences</p>
+          <input name="vocPref" type="number">
+
+          <p>Min amount of Computers</p>
+          <input name="amountComp" type="number">
+          <p>Min amount of Seats</p>
+          <input name="amountSeat" type="number">
+          <p>Projector(1 Yes, 0 No )</p>
+          <input name="projector" type="number">
+          <p>Min amount of Robots</p>
+          <input name="amountRob" type="number">
+
+          <input type="hidden" name="form_type" value="prop">
+        <button class="Enter">Enter</button>
+    </form>
+
+    </div>
+  </div>
+</body>
+</html>

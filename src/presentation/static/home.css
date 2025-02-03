@@ -1,0 +1,106 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to bottom left, rgba(0, 0, 0, 1) 10%, rgba(212, 210, 201, 0.8109) 53%, rgba(0, 0, 0, 0.67) 86%),
+    linear-gradient(to top right, rgba(0, 0, 0, 1) 10%, rgba(198, 153, 7, 0.8109) 53%, rgba(0, 0, 0, 0.67) 86%);
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+
+/* Main container holding both parts */
+.transPart {
+  display: flex;  /* Flexbox layout to align left and right parts */
+  justify-content: space-between;  /* Space between the left and right parts */
+  align-items: flex-start;  /* Align both parts to the top */
+  gap: 20px;
+  border-radius:20px;
+}
+
+.leftPart {
+  width: 45%;  /* Take up 30% of the space in the container */
+  padding: 20px;  /* Padding inside the form */
+  background-color: rgba(255, 255, 255, 0.4);  /* Optional background color */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  /* Vertically center content */
+  align-items: center;  /* Horizontally center content */
+  border-radius: 20px;
+  height: 100%;  /* Ensure the height of the container stretches to fill space */
+}
+
+.rightpart {
+  overflow-y: auto;              /* Enable vertical scrolling */
+  width: 45%;                    /* Take up 45% of the space in the container */
+  padding: 20px;                 /* Padding inside the form */
+  background-color: rgba(255, 255, 255, 0.4);  /* Optional background color */
+  display: flex;                 
+  flex-direction: column;        /* Arrange items vertically */
+  justify-content: center;       /* Vertically center content */
+  align-items: center;           /* Horizontally center content */
+  border-radius: 20px;
+  max-height: 80vh;              /* Limit the height to 80% of the viewport height */
+}
+
+h1 {
+  margin: 0;  /* Remove default margin */
+  padding: 10px 0;
+  text-align:center;
+}
+
+p {
+  margin: 0;
+  text-align:center;
+}
+
+/* Form inside both parts */
+form {
+  display: flex;
+  flex-direction: column;  /* Stack form elements vertically */
+  gap: 1px;  /* Space between the form elements */
+  width:400px;
+  justify-content:center;
+  align-items:center;
+}
+
+/* Inputs container for specific formatting */
+form input {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  width: 100px;
+  border: 1px solid #ccc;  /* Optional border for the inputs */
+}
+
+/* Specific styling for the "Enter" button */
+.Enter {
+  padding: 10px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.Enter:hover {
+  background-color: #0056b3;
+}
+
+/* Ensure the start and end hour inputs are in a row */
+form div {
+  display: flex;
+  gap: 15px;  /* Space between the start hour and end hour inputs */
+}
+
+/* Ensure inputs for weight fields have consistent spacing */
+form input[type="number"] {
+  width: 100%;  /* Take up the full width of the form */
+}
+
+.leftPart form,
+.rightpart form {
+  margin-bottom: 20px;
+}

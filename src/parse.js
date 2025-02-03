@@ -176,13 +176,13 @@ function parseAndInsertFacilities(jsonFile) {
 
 console.time("Execution Time");
 
-// parseAndInsertLight('../Project_sensor_data/LightIntensity_sensor_data.json')
-// parseAndInsertHumidity(`../Project_sensor_data/humidity_sensor_data.json`)
-// parseAndInsertAirQuality(`../Project_sensor_data/air_quality_sensor_data.json`)
-// parseAndInsertCO2('../Project_sensor_data/co2_sensor_data.json')
-// parseAndInsertSound('../Project_sensor_data/sound_sensor_data.json')
-// parseAndInsertTemperature('../Project_sensor_data/temperature_sensor_data.json')
-// parseAndInsertVoc('../Project_sensor_data/voc_sensor_data.json')
-// parseAndInsertFacilities('../Project_sensor_data/room_facilities_data.json')
-//
+parseAndInsertLight('../Project_sensor_data/LightIntensity_sensor_data.json')
+parseAndInsertHumidity(`../Project_sensor_data/humidity_sensor_data.json`)
+parseAndInsertAirQuality(`../Project_sensor_data/air_quality_sensor_data.json`)
+parseAndInsertCO2('../Project_sensor_data/co2_sensor_data.json')
+parseAndInsertSound('../Project_sensor_data/sound_sensor_data.json')
+parseAndInsertTemperature('../Project_sensor_data/temperature_sensor_data.json')
+parseAndInsertVoc('../Project_sensor_data/voc_sensor_data.json')
+parseAndInsertFacilities('../Project_sensor_data/room_facilities_data.json')
+
 console.timeEnd("Execution Time");
